@@ -1,0 +1,47 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.0'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url "https://plugins.gradle.org/m2/"
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+subprojects {
+	apply plugin: "java"
+	apply plugin: 'org.springframework.boot'
+	apply plugin: "io.spring.dependency-management"
+
+	repositories {
+		mavenCentral()
+		maven { url 'https://repo.spring.io/snapshot' }
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	}
+
+}
+
+project(':multi-api') {
+	dependencies {
+		project(':database')
+	}
+
+	bootJar {
+		archiveBaseName.set(":multi-api")
+		launchScript()
+	}
+}

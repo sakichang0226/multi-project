@@ -1,0 +1,3 @@
+[submodule "demo-core"]
+	path = demo-core
+	url = https://github.com/sakichang0226/demo-core.git
