@@ -14,6 +14,11 @@ import java.util.Map;
 @Slf4j
 public class MultiApiExceptionHandler {
 
+    /**
+     * IOException発生時のエラーレスポンス
+     * @param exception 例外クラス
+     * @return エラーレスポンス
+     */
     @ExceptionHandler(IOException.class)
     public ResponseEntity<Object> exceptionHandler(Exception exception){
         log.warn(exception.getMessage());
