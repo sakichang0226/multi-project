@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -26,6 +27,13 @@ public class S3Controller {
     @GetMapping("/s3/json")
     public ResponseEntity<Test> getTestResponse() {
         Test body = s3Service.getTest();
+
+        return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @GetMapping("/s3/json/all")
+    public ResponseEntity<List<Test>> getTests() {
+        List<Test> body = s3Service.getTestList();
 
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
