@@ -1,6 +1,8 @@
 package com.example.multi_api.controller.advice;
 
 import com.demo.demo_s3.exception.DemoS3BusinessException;
+import com.demo.demo_s3.exception.DemoS3SystemException;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +19,9 @@ import java.util.Map;
 @Slf4j
 public class MultiApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    /**
-     * IOException発生時のエラーレスポンス
-     * @param exception 例外クラス
-     * @return エラーレスポンス
-     */
-    @ExceptionHandler(IOException.class)
-    public ResponseEntity<Object> exceptionHandler(Exception exception){
-        log.warn(exception.getMessage());
+    private static String CODE = "code";
 
-        Map<String, String> errorInfo = new HashMap<>();
-        errorInfo.put("code", "API_ERR_001");
-
-        return new ResponseEntity<>(errorInfo, HttpStatus.NOT_FOUND);
-    }
+    private static String MESSAGE = "message";
 
     /**
      * DemoS3BusinessException発生時のエラーレスポンス
@@ -41,10 +32,35 @@ public class MultiApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleException(DemoS3BusinessException exception){
         log.warn(exception.getMessage());
 
-        Map<String, String> errorInfo = new HashMap<>();
-        errorInfo.put("code", "API_ERR_001");
+        return new ResponseEntity<>(createErrorInfo(exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
 
-        return new ResponseEntity<>(errorInfo, HttpStatus.NOT_FOUND);
+    /**
+     * DemoS3SystemException発生時のエラーレスポンス
+     * @param exception 例外クラス
+     * @return エラーレスポンス
+     */
+    @ExceptionHandler(DemoS3SystemException.class)
+    public ResponseEntity<Object> handleException(DemoS3SystemException exception){
+        log.error(exception.getMessage());
+
+        return new ResponseEntity<>(createErrorInfo(exception.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 例外クラスのメッセージに設定されているエラーコードとメッセージをレスポンスとして返す
+     * @param message 例外クラスのメッセージ
+     * @return　エラーレスポンス
+     */
+    public Map<String, String> createErrorInfo(@NonNull String message) {
+        String[] error = message.split(":");
+        Map<String, String> errorInfo = new HashMap<>();
+
+        errorInfo.put(CODE, error[0]);
+        errorInfo.put(MESSAGE, error[1]);
+
+        return errorInfo;
     }
 
 
