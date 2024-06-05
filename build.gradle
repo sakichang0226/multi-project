@@ -40,6 +40,7 @@ subprojects {
 project(':multi-api') {
 	dependencies {
 		implementation project(':database')
+		implementation project(':demo-s3')
 	}
 
 	jar {
