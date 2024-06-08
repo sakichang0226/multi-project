@@ -2,6 +2,8 @@ package com.example.multi_api.controller.advice;
 
 import com.demo.demo_s3.exception.DemoS3BusinessException;
 import com.demo.demo_s3.exception.DemoS3SystemException;
+import com.example.dynamodb.demo.exception.DynamoDbDemoBusinessException;
+import com.example.dynamodb.demo.exception.DynamoDbDemoSystemException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -46,6 +48,32 @@ public class MultiApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(createErrorInfo(exception.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * DynamoDbDemoSystemException発生時のエラーレスポンス
+     * @param exception 例外クラス
+     * @return エラーレスポンス
+     */
+    @ExceptionHandler(DynamoDbDemoSystemException.class)
+    public ResponseEntity<Object> handleException(DynamoDbDemoSystemException exception){
+        log.error(exception.getMessage());
+
+        return new ResponseEntity<>(createErrorInfo(exception.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * DynamoDbDemoBusinessException発生時のエラーレスポンス
+     * @param exception 例外クラス
+     * @return エラーレスポンス
+     */
+    @ExceptionHandler(DynamoDbDemoBusinessException.class)
+    public ResponseEntity<Object> handleException(DynamoDbDemoBusinessException exception){
+        log.warn(exception.getMessage());
+
+        return new ResponseEntity<>(createErrorInfo(exception.getMessage()),
+                HttpStatus.NOT_FOUND);
     }
 
     /**
