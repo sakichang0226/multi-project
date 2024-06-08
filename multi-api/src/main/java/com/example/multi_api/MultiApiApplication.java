@@ -7,7 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication(scanBasePackages = {
 		"com.example.multi_api",
 		"com.demo.database",
-		"com.demo.demo_s3"
+		"com.demo.demo_s3",
+		"com.example.dynamodb.demo"
 })
 public class MultiApiApplication {
 

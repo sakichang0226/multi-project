@@ -41,6 +41,7 @@ project(':multi-api') {
 	dependencies {
 		implementation project(':database')
 		implementation project(':demo-s3')
+		implementation project(':dynamodb-demo')
 	}
 
 	jar {
