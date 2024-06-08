@@ -1,6 +1,9 @@
 include 'multi-api'
 include 'database'
 include 'demo-s3'
+include 'dynamodb-demo'
+
 
 project(':database').projectDir = file('demo-core/database')
 project(':demo-s3').projectDir = file('demo-core/demo-s3')
+project(':dynamodb-demo').projectDir = file('demo-core/dynamodb-demo')
