@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class DynamoDbController {
@@ -17,10 +19,16 @@ public class DynamoDbController {
     private final TodoService service;
 
     @GetMapping("todo/{key}")
-    public ResponseEntity<Todo> getTodo(@PathVariable("key") String key, TodoRequest request) {
-        System.out.println(request);
-
+    public ResponseEntity<Todo> getTodo(@PathVariable("key") String key,TodoRequest request) {
         Todo item = service.getTodo(key, request.getUser_id().toString());
+        return new ResponseEntity<>(item, HttpStatus.OK);
+    }
+
+    @GetMapping("todo/{key}/query")
+    public ResponseEntity<List<Todo>> getTodos(@PathVariable("key") String key) {
+
+        List<Todo> item = service.getTodos(key);
+
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
